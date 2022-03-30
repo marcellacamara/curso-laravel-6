@@ -1,8 +1,21 @@
 <?php
 
 use App\Http\Controllers\Admin\TesteController;
+use App\Http\Controllers\ProductController;
+use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
-use PhpParser\Node\Expr\FuncCall;
+
+Route::resource('products', ProductController::class); //->middleware('auth');
+
+/*
+Route::delete('products/{id}', [ProductController::class, "destroy"])->name('products.destroy');
+Route::put('products/{id}', [ProductController::class, "update"])->name('products.update');
+Route::get('products/{id}/edit', [ProductController::class, "edit"])->name('products.edit');
+Route::get('products/create', [ProductController::class, "create"])->name('products.create');
+Route::get('products/{id}', [ProductController::class, "show"])->name('products.show');
+Route::get('products', [ProductController::class, "index"])->name('products.index');
+Route::post('products', [ProductController::class, "store"])->name('products.store');
+*/
 
 Route::get('/login', function () {
     return 'login';
@@ -12,16 +25,37 @@ Route::middleware([])->group(function () {
 
     Route::prefix('admin')->group(function () {
 
-        Route::get('/dashboard', [TesteController::class, "teste"])->name("admin.dashboard");
+        Route::name('admin.')->group(function () {
 
-        Route::get('/financeiro', [TesteController::class, "teste"])->name("admin.financeiro");
+            Route::get('/dashboard', [TesteController::class, "teste"])->name('dashboard');
 
-        Route::get('/produtos', [TesteController::class, "teste"])->name("admin.produtos");
+            Route::get('/financeiro', [TesteController::class, "teste"])->name('financeiro');
 
-        Route::get('/', [TesteController::class, "teste"])->name("admin.home");
+            Route::get('/produtos', [TesteController::class, "teste"])->name('produtos');
+
+            Route::get('/', function () {
+                return redirect()->route('admin.dashboard');
+            })->name('home');
+        });
     });
 });
 
+/*
+Route::group([
+    'middleware' => [''],
+    'prefix' => 'admin',
+], function () {
+    Route::get('/dashboard', [TesteController::class, "teste"])->name('dashboard');
+
+    Route::get('/financeiro', [TesteController::class, "teste"])->name('financeiro');
+
+    Route::get('/produtos', [TesteController::class, "teste"])->name('produtos');
+
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    })->name('home');
+});
+*/
 
 Route::get('redirect3', function () {
     return redirect()->route('url.name');
