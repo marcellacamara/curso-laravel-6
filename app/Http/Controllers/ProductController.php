@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateProductRequest;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
@@ -34,9 +35,28 @@ class ProductController extends Controller
     }
 
 
-    public function store(Request $request)
+    public function store(StoreUpdateProductRequest $request)
     {
-        dd('cadastrando');
+        /*
+        $request->validate([
+            'name' => 'required|min:3|max:255',
+            'description' => 'nullable|min:3|max:10000',
+            'photo' => 'required|image',
+        ]);
+        */
+
+        dd('OK');
+
+        // dd($request->all());
+        // dd($request->name);
+        // dd($request->only(['name']['description']));
+        // dd($request->input('teste', 'default'));
+        // dd($request->except('name'));
+        if ($request->file('photo')->isValid()) {
+            //$request->file('photo')->store('products');
+            $nameFile = $request->name . '.' . $request->photo->extension();
+            $request->file('photo')->storeAs('products', $nameFile);
+        }
     }
 
 
