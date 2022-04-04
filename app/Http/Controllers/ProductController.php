@@ -3,15 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreUpdateProductRequest;
+use App\Models\Product;
 use Illuminate\Http\Request;
 
 class ProductController extends Controller
 {
     protected $request;
+    private $repository;
 
-    public function __construct(Request $request)
+    public function __construct(Request $request, Product $product)
     {
         $this->request = $request;
+        $this->repository = $product;
         //$this->middleware('auth')->only('create');
         //$this->middleware('auth')->except('index');
         // $this->middleware('auth')->only([
@@ -22,10 +25,10 @@ class ProductController extends Controller
 
     public function index()
     {
-        $teste = 123;
-        $teste2 = 456;
-        $teste3 = [1, 2, 3, 4, 5];
-        return view('admin.pages.products.index', compact('teste', 'teste2', 'teste3'));
+        $products = Product::paginate();
+        return view('admin.pages.products.index', [
+            'products' => $products,
+        ]);
     }
 
 
@@ -37,21 +40,12 @@ class ProductController extends Controller
 
     public function store(StoreUpdateProductRequest $request)
     {
-        /*
-        $request->validate([
-            'name' => 'required|min:3|max:255',
-            'description' => 'nullable|min:3|max:10000',
-            'photo' => 'required|image',
-        ]);
-        */
+        $data = $request->only('name', 'description', 'price');
 
-        dd('OK');
+        $this->repository->create($data);
 
-        // dd($request->all());
-        // dd($request->name);
-        // dd($request->only(['name']['description']));
-        // dd($request->input('teste', 'default'));
-        // dd($request->except('name'));
+        return redirect()->route('products.index');
+
         if ($request->file('photo')->isValid()) {
             //$request->file('photo')->store('products');
             $nameFile = $request->name . '.' . $request->photo->extension();
@@ -62,24 +56,42 @@ class ProductController extends Controller
 
     public function show($id)
     {
-        //
+        //$product = Product::where('id', $id)->firts();
+        if (!$product = $this->repository->find($id)) {
+            return redirect()->back();
+        }
+
+        return view('admin.pages.products.show', [
+            'product' => $product
+        ]);
     }
 
 
     public function edit($id)
     {
-        return view('admin.pages.products.edit', compact('id'));
+        if (!$product = $this->repository->find($id)) {
+            return redirect()->back();
+        }
+        return view('admin.pages.products.edit', compact('product'));
     }
 
 
     public function update(Request $request, $id)
     {
-        dd("editando o produto {$id}");
+        if (!$product = $this->repository->find($id)) {
+            return redirect()->back();
+        }
+        $product->update($request->all());
+        return redirect()->route('products.index');
     }
 
 
     public function destroy($id)
     {
-        //
+        if (!$product = $this->repository->find($id)) {
+            return redirect()->back();
+        }
+        $product->delete();
+        return redirect()->route('products.index');
     }
 }
