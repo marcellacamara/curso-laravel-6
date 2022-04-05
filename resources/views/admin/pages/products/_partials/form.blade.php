@@ -1,13 +1,13 @@
 @include('admin.includes.alerts')
 @csrf
 <div class="form-group">
-    <input type="text" class="form-control" name="name" placeholder="nome:" value="{{old('name')}}">
+    <input type="text" class="form-control" name="name" placeholder="nome:" value="{{$product->name ?? old('name')}}">
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" name="price" placeholder="preço:" value="{{old('price')}}">
+    <input type="text" class="form-control" name="price" placeholder="preço:" value="{{$product->price ?? old('price')}}">
 </div>
 <div class="form-group">
-    <input type="text" class="form-control" name="description" placeholder="descrição:" value="{{old('description')}}">
+    <input type="text" class="form-control" name="description" placeholder="descrição:" value="{{$product->description ?? old('description')}}">
 </div>
 <div class="form-group">
     <input type="file" class="form-control" name="image">

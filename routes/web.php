@@ -5,6 +5,7 @@ use App\Http\Controllers\ProductController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
+Route::any('products/search', [ProductController::class, "search"])->name('products.search');
 Route::resource('products', ProductController::class); //->middleware('auth');
 
 /*
