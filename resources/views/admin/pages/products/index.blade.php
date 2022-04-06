@@ -1,10 +1,17 @@
-@extends('admin.layouts.app')
+{{-- @extends('admin.layouts.app') --}}
 
-@section('title', 'Gestão de produtos')
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+            Exibindo os produtos
+        </h2>
+    </x-slot>
 
-@section('content')
-    <h2>Exibindo os produtos</h2>
-    <a href="{{route('products.create')}}" class="btn btn-primary">cadastrar</a>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div class="p-6 bg-white border-b border-gray-200">
+                    <a href="{{route('products.create')}}" class="btn btn-primary">cadastrar</a>
     <hr>
 
     <form action="{{route('products.search')}}" method="post" class="form form-inline">
@@ -46,5 +53,8 @@
     @else
         {!!$products->links()!!}
     @endif
-
-@endsection
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
