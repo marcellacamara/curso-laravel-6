@@ -18,9 +18,9 @@ Route::get('products', [ProductController::class, "index"])->name('products.inde
 Route::post('products', [ProductController::class, "store"])->name('products.store');
 */
 
-Route::get('/login', function () {
-    return 'login';
-})->name('login');
+// Route::get('/login', function () {
+//     return 'login';
+// })->name('login');
 
 Route::middleware([])->group(function () {
 
@@ -28,7 +28,7 @@ Route::middleware([])->group(function () {
 
         Route::name('admin.')->group(function () {
 
-            Route::get('/dashboard', [TesteController::class, "teste"])->name('dashboard');
+            //Route::get('/dashboard', [TesteController::class, "teste"])->name('dashboard');
 
             Route::get('/financeiro', [TesteController::class, "teste"])->name('financeiro');
 
@@ -111,3 +111,9 @@ Route::get('/contato', function () {
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/dashboard', function () {
+    return view('dashboard');
+})->middleware(['auth'])->name('dashboard');
+
+require __DIR__ . '/auth.php';
