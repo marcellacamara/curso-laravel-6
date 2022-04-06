@@ -5,8 +5,8 @@ use App\Http\Controllers\ProductController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 
-Route::any('products/search', [ProductController::class, "search"])->name('products.search');
-Route::resource('products', ProductController::class); //->middleware('auth');
+Route::any('products/search', [ProductController::class, "search"])->name('products.search')->middleware('auth');
+Route::resource('products', ProductController::class)->middleware(['auth', 'check.is.admin']);
 
 /*
 Route::delete('products/{id}', [ProductController::class, "destroy"])->name('products.destroy');
@@ -22,7 +22,7 @@ Route::post('products', [ProductController::class, "store"])->name('products.sto
 //     return 'login';
 // })->name('login');
 
-Route::middleware([])->group(function () {
+Route::middleware(['auth'])->group(function () {
 
     Route::prefix('admin')->group(function () {
 
